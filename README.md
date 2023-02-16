@@ -1,5 +1,6 @@
 # three_rollup
 
+**To see the page, go [here](https://https://enzovenon.github.io/dist/index.html)** 
 ## About
 
 Basic [THREE.js](https://threejs.org/) project template using [JavaScript modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules) and [Rollup](https://rollupjs.org).
