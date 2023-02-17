@@ -95,6 +95,7 @@ function init() {
             halfSphereGroup.add(borderMesh);
             reticle.matrix.decompose(halfSphereGroup.position, halfSphereGroup.quaternion, halfSphereGroup.scale);
             halfSphereGroup.rotateX(- Math.PI / 2);
+            halfSphereGroup.rotation.z = 0;
             scene.add(halfSphereGroup);
         }
     }
