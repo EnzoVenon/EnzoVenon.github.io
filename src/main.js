@@ -81,9 +81,9 @@ function init() {
             halfSphereGroup.add(outerSphere);
             halfSphereGroup.add(holeMesh);
             halfSphereGroup.add(borderMesh);
-            halfSphereGroup.rotateX(- Math.PI / 2);
             reticle.matrix.decompose(halfSphereGroup.position, halfSphereGroup.quaternion, halfSphereGroup.scale);
-            //halfSphereGroup.rotation.z = 0;
+            halfSphereGroup.rotateX(- Math.PI / 2);
+            halfSphereGroup.rotation.z = 0;
             scene.add(halfSphereGroup);
         }
     }

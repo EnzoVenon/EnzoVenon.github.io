@@ -3,9 +3,11 @@
 ## Description
 Evaluation on a 1-day project on Augmented Reality.
 
+**[See the page.](https://enzovenon.github.io/dist/index.html)**
+
 If you want to see the page on a computer, you have to install a WebXR extension. For example, [on Chrome](https://chrome.google.com/webstore/detail/webxr-api-emulator/mjddjgeghkdijejnciaefnkjmkafnnje?hl=fr), [on Firefox](https://addons.mozilla.org/fr/firefox/addon/webxr-api-emulator/).
 
-**[See the page.](https://enzovenon.github.io/dist/index.html)** 
+Pictures might be shown sideways after changing wall.
 
 
 ## About
