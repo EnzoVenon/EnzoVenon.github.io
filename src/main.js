@@ -25,26 +25,14 @@ function init() {
 
     camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 20);
 
-    // camera.position.set(0, 2, 4);
-    // camera.lookAt( scene.position );	
-    // scene.add( camera );
-
     let ambientLight = new THREE.AmbientLight(0xcccccc, 1.00);
     scene.add(ambientLight);
-
-    // let pointLight = new THREE.PointLight();
-    // camera.add( pointLight );
 
     renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.xr.enabled = true;
     container.appendChild(renderer.domElement);
-    /*
-    renderer.domElement.style.position = 'absolute'
-    renderer.domElement.style.top = '0px'
-    renderer.domElement.style.left = '0px'
-    */
     window.addEventListener('resize', onWindowResize, false);
 
     document.body.appendChild(ARButton.createButton(renderer, { requiredFeatures: ['hit-test'] }));
@@ -93,9 +81,9 @@ function init() {
             halfSphereGroup.add(outerSphere);
             halfSphereGroup.add(holeMesh);
             halfSphereGroup.add(borderMesh);
-            reticle.matrix.decompose(halfSphereGroup.position, halfSphereGroup.quaternion, halfSphereGroup.scale);
             halfSphereGroup.rotateX(- Math.PI / 2);
-            halfSphereGroup.rotation.z = 0;
+            reticle.matrix.decompose(halfSphereGroup.position, halfSphereGroup.quaternion, halfSphereGroup.scale);
+            //halfSphereGroup.rotation.z = 0;
             scene.add(halfSphereGroup);
         }
     }
