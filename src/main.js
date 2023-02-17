@@ -1,94 +1,127 @@
-// Import only what you need, to help your bundler optimize final code size using tree shaking
-// see https://developer.mozilla.org/en-US/docs/Glossary/Tree_shaking)
-
-// If you prefer to import the whole library, with the THREE prefix, use the following line instead:
-// import * as THREE from 'three'
-
-// NOTE: three/addons alias is supported by Rollup: you can use it interchangeably with three/examples/jsm/  
-/*
-import {
-  GLTFLoader
-} from 'three/addons/loaders/GLTFLoader.js';
-*/
-
 import * as THREE from 'three';
 import { ARButton } from 'three/addons/webxr/ARButton.js';
 
-let camera, scene, renderer;
+let scene, camera, renderer;
+let cloakMaterial, cloakTexture;
+
 let controller;
 
 init();
 animate();
 
+function loadData() {
+    new GLTFLoader()
+        .setPath('assets/models/')
+        .load('test.glb', gltfReader);
+}
+
+
+function gltfReader(gltf) {
+    let testModel = null;
+
+    testModel = gltf.scene;
+
+    if (testModel != null) {
+        console.log("Model loaded:  " + testModel);
+        scene.add(gltf.scene);
+    } else {
+        console.log("Load FAILED.  ");
+    }
+}
+
 function init() {
 
-  const container = document.createElement('div');
-  document.body.appendChild(container);
+    const container = document.createElement('div');
+    document.body.appendChild(container);
 
-  scene = new THREE.Scene();
+    scene = new THREE.Scene();
 
-  camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 20);
+    camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 20);
 
-  const light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
-  light.position.set(0.5, 1, 0.25);
-  scene.add(light);
+    // camera.position.set(0, 2, 4);
+    // camera.lookAt( scene.position );	
+    // scene.add( camera );
 
-  //
+    let ambientLight = new THREE.AmbientLight(0xcccccc, 1.00);
+    scene.add(ambientLight);
 
-  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-  renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.xr.enabled = true;
-  container.appendChild(renderer.domElement);
+    // let pointLight = new THREE.PointLight();
+    // camera.add( pointLight );
 
-  //
+    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true }); //alpha false ?
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.xr.enabled = true;
+    container.appendChild(renderer.domElement);
+    /*
+    renderer.domElement.style.position = 'absolute'
+    renderer.domElement.style.top = '0px'
+    renderer.domElement.style.left = '0px'
+    */
+    window.addEventListener('resize', onWindowResize, false);
 
-  document.body.appendChild(ARButton.createButton(renderer));
+    document.body.appendChild(ARButton.createButton(renderer));
 
-  //
+    const geometry = new THREE.BoxGeometry(0.1, 0.1, 0.1).rotateX(Math.PI / 2);
 
-  //const geometry = new THREE.CylinderGeometry(0, 0.05, 0.2, 32).rotateX(Math.PI / 2);
-  const geometry = new THREE.BoxGeometry(0.1, 0.1, 0.1).rotateX(Math.PI / 2);
+    function onSelect() {
 
-  function onSelect() {
+        const material = new THREE.MeshPhongMaterial({ color: 0xffffff * Math.random() });
+        const mesh = new THREE.Mesh(geometry, material);
+        mesh.position.set(0, 0, - 0.3).applyMatrix4(controller.matrixWorld);
+        mesh.quaternion.setFromRotationMatrix(controller.matrixWorld);
+        scene.add(mesh);
+        meshList.push(mesh);
 
-    const material = new THREE.MeshPhongMaterial({ color: 0xffffff * Math.random() });
-    const mesh = new THREE.Mesh(geometry, material);
-    mesh.position.set(0, 0, - 0.3).applyMatrix4(controller.matrixWorld);
-    mesh.quaternion.setFromRotationMatrix(controller.matrixWorld);
-    scene.add(mesh);
+    }
 
-  }
+    controller = renderer.xr.getController(0);
+    controller.addEventListener('select', onSelect);
+    scene.add(controller);
 
-  controller = renderer.xr.getController(0);
-  controller.addEventListener('select', onSelect);
-  scene.add(controller);
 
-  //
+    let loader = new THREE.TextureLoader();
 
-  window.addEventListener('resize', onWindowResize);
+    let halfSphereGroup = new THREE.Group();
+    halfSphereGroup.position.y = 1;
+    scene.add(halfSphereGroup);
 
-}
+    let sphereRadius = 1;
+    let holeRadius = 0.5;
+    let borderThickness = 0.05;
 
-function onWindowResize() {
+    let halfSphereGeometry = new THREE.SphereGeometry(sphereRadius, 32, 32, Math.PI, Math.PI); // startAngle, sweepAngle
 
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
 
-  renderer.setSize(window.innerWidth, window.innerHeight);
+    let cloakTexture = loader.load("assets/img/color-grid.png");
+    cloakMaterial = new THREE.MeshBasicMaterial({ map: cloakTexture, side: THREE.FrontSide, colorWrite: false }); // change colorWrite: true to see the cloak
 
-}
+    let sceneTexture = loader.load("assets/img/blocky_photo_studio_1k.jpg");
+    sceneTexture.offset.x = 0.5;
+    sceneTexture.repeat.set(0.5, 1);
 
-//
+    let innerSphere = new THREE.Mesh(halfSphereGeometry, new THREE.MeshBasicMaterial({ map: sceneTexture, side: THREE.BackSide }));
+    let outerSphere = new THREE.Mesh(halfSphereGeometry, cloakMaterial);
+    let holeMesh = new THREE.Mesh(new THREE.RingGeometry(holeRadius, sphereRadius * 1.01, 32), cloakMaterial);
+    let borderMesh = new THREE.Mesh(new THREE.RingGeometry(holeRadius, holeRadius + borderThickness, 32), new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide }));
+    borderMesh.position.z = 0.001; // avoid depth-fighting artifacts
 
-function animate() {
-
-  renderer.setAnimationLoop(render);
-
+    halfSphereGroup.add(innerSphere);
+    halfSphereGroup.add(outerSphere);
+    halfSphereGroup.add(holeMesh);
+    halfSphereGroup.add(borderMesh);
 }
 
 function render() {
+    renderer.render(scene, camera);
+}
 
-  renderer.render(scene, camera);
+function animate() {
+    renderer.setAnimationLoop(render);
+}
 
+function onWindowResize() {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
 }

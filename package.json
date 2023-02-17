@@ -6,7 +6,7 @@
   "scripts": {
     "build": "rollup -w -c \"rollup_config.js\"",
     "start": "serve dist",
-    "allinone": "npm run build & serve dist & lt --port 3000",
+    "all": "npm run build & npm start",
     "lt": "lt --port 3000",
     "open": "open http://localhost:3000/",
     "clean": "rm -rf dist"
