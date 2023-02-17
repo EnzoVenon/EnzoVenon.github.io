@@ -78,7 +78,6 @@ function init() {
             //portal
             let halfSphereGroup = new THREE.Group();
             //halfSphereGroup.position.y = 1;
-            reticle.matrix.decompose(halfSphereGroup.position, halfSphereGroup.quaternion, halfSphereGroup.scale);
 
             let sceneTexture = loader.load(img_list[Math.floor(Math.random() * 4)]);
             sceneTexture.offset.x = 0.5;
@@ -94,6 +93,8 @@ function init() {
             halfSphereGroup.add(outerSphere);
             halfSphereGroup.add(holeMesh);
             halfSphereGroup.add(borderMesh);
+            reticle.matrix.decompose(halfSphereGroup.position, halfSphereGroup.quaternion, halfSphereGroup.scale);
+            halfSphereGroup.rotateX(- Math.PI / 2);
             scene.add(halfSphereGroup);
         }
     }
