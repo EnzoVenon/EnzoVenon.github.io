@@ -1,26 +1,11 @@
 // Import only what you need, to help your bundler optimize final code size using tree shaking
 // see https://developer.mozilla.org/en-US/docs/Glossary/Tree_shaking)
-/*
-import {
-  PerspectiveCamera,
-  Scene,
-  WebGLRenderer,
-  BoxGeometry,
-  Mesh,
-  MeshNormalMaterial,
-  AmbientLight,
-  Clock
-} from 'three';
 
 // If you prefer to import the whole library, with the THREE prefix, use the following line instead:
 // import * as THREE from 'three'
 
 // NOTE: three/addons alias is supported by Rollup: you can use it interchangeably with three/examples/jsm/  
-
-import {
-  OrbitControls
-} from 'three/addons/controls/OrbitControls.js';
-
+/*
 import {
   GLTFLoader
 } from 'three/addons/loaders/GLTFLoader.js';
@@ -62,7 +47,8 @@ function init() {
 
   //
 
-  const geometry = new THREE.CylinderGeometry(0, 0.05, 0.2, 32).rotateX(Math.PI / 2);
+  //const geometry = new THREE.CylinderGeometry(0, 0.05, 0.2, 32).rotateX(Math.PI / 2);
+  const geometry = new THREE.BoxGeometry(0.1, 0.1, 0.1).rotateX(Math.PI / 2);
 
   function onSelect() {
 
