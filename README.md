@@ -1,4 +1,4 @@
-# three_rollup
+# Web 3D project
 
 ## Description
 Evaluation on a 1-day project on Augmented Reality.
@@ -9,6 +9,8 @@ If you want to see the page on a computer, you have to install a WebXR extension
 
 Pictures might be shown sideways after changing wall.
 
+## Demo
+![demo.GIF should be there](https://drive.google.com/file/d/1OChxH9FSKmPwkAhIS6kzcGyV80MQvpqM/view?usp=sharing)
 
 ## About
 
