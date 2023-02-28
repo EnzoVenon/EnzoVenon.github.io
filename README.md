@@ -10,7 +10,7 @@ If you want to see the page on a computer, you have to install a WebXR extension
 Pictures might be shown sideways after changing wall.
 
 ## Demo
-![demo.gif should be here](demo.gif)
+![demo.gif should be here](https://enzovenon.github.io/demo.gif)
 
 ## About
 
